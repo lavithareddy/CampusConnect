@@ -17,7 +17,7 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
