@@ -1,3 +1,6 @@
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "campusconnect.db")
 import csv
 from flask import make_response
 from flask import Flask, render_template, request, redirect, session
@@ -14,7 +17,7 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("campusconnect.db")
+        sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
@@ -43,7 +46,7 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("campusconnect.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         try:
@@ -81,7 +84,7 @@ def form():
         request_type = request.form["request_type"]
         description = request.form["description"]
 
-        conn = sqlite3.connect("campusconnect.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
@@ -100,7 +103,7 @@ def form():
 @app.route("/applications")
 def applications():
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM forms")
@@ -114,7 +117,7 @@ def applications():
 @app.route("/notifications")
 def notifications():
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -138,7 +141,7 @@ def notifications():
 @app.route("/profile")
 def profile():
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -164,7 +167,7 @@ def admin():
 
         if username == "admin" and password == "admin123":
 
-            conn = sqlite3.connect("campusconnect.db")
+            conn = sqlite3.connect(DB_PATH)
             cursor = conn.cursor()
 
             cursor.execute("SELECT COUNT(*) FROM students")
@@ -204,7 +207,7 @@ def admin_notifications():
 
         message = request.form["message"]
 
-        conn = sqlite3.connect("campusconnect.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -230,7 +233,7 @@ def admin_notifications():
 @app.route("/allforms")
 def allforms():
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM forms")
@@ -249,7 +252,7 @@ def students():
 
     search = request.args.get("search", "")
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -269,7 +272,7 @@ def students():
 @app.route("/approve/<int:id>")
 def approve(id):
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -286,7 +289,7 @@ def approve(id):
 @app.route("/reject/<int:id>")
 def reject(id):
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -309,7 +312,7 @@ def logout():
 @app.route("/delete_student/<int:id>")
 def delete_student(id):
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -325,7 +328,7 @@ def delete_student(id):
 @app.route("/delete_form/<int:id>")
 def delete_form(id):
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM forms WHERE id=?", (id,))
@@ -342,7 +345,7 @@ import io
 @app.route("/download_report")
 def download_report():
 
-    conn = sqlite3.connect("campusconnect.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM forms")
